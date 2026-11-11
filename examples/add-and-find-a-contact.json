@@ -1,0 +1,161 @@
+{
+	"name": "Add a contact to ContactZapp, then find it again",
+	"nodes": [
+		{
+			"id": "1",
+			"name": "Manual Trigger",
+			"type": "n8n-nodes-base.manualTrigger",
+			"typeVersion": 1,
+			"position": [
+				0,
+				0
+			],
+			"parameters": {}
+		},
+		{
+			"id": "2",
+			"name": "New person",
+			"type": "n8n-nodes-base.set",
+			"typeVersion": 3.4,
+			"position": [
+				220,
+				0
+			],
+			"parameters": {
+				"assignments": {
+					"assignments": [
+						{
+							"id": "a",
+							"name": "firstName",
+							"value": "Ada",
+							"type": "string"
+						},
+						{
+							"id": "b",
+							"name": "lastName",
+							"value": "Lovelace",
+							"type": "string"
+						},
+						{
+							"id": "c",
+							"name": "email",
+							"value": "ada@example.com",
+							"type": "string"
+						},
+						{
+							"id": "d",
+							"name": "phone",
+							"value": "+12025550108",
+							"type": "string"
+						}
+					]
+				},
+				"options": {}
+			}
+		},
+		{
+			"id": "3",
+			"name": "Create contact",
+			"type": "n8n-nodes-contactzapp.contactZapp",
+			"typeVersion": 1,
+			"position": [
+				440,
+				0
+			],
+			"parameters": {
+				"resource": "contact",
+				"operation": "create",
+				"fields": {
+					"firstName": "={{ $json.firstName }}",
+					"lastName": "={{ $json.lastName }}",
+					"emails": {
+						"values": [
+							{
+								"label": "Work",
+								"value": "={{ $json.email }}"
+							}
+						]
+					},
+					"phones": {
+						"values": [
+							{
+								"label": "Mobile",
+								"value": "={{ $json.phone }}"
+							}
+						]
+					}
+				},
+				"options": {
+					"idempotencyKey": "={{ $json.email }}"
+				}
+			},
+			"credentials": {
+				"contactZappApi": {
+					"id": "",
+					"name": "ContactZapp API"
+				}
+			}
+		},
+		{
+			"id": "4",
+			"name": "Find contact",
+			"type": "n8n-nodes-contactzapp.contactZapp",
+			"typeVersion": 1,
+			"position": [
+				660,
+				0
+			],
+			"parameters": {
+				"resource": "contact",
+				"operation": "getAll",
+				"returnAll": false,
+				"limit": 5,
+				"filters": {
+					"email": "={{ $('New person').item.json.email }}"
+				}
+			},
+			"credentials": {
+				"contactZappApi": {
+					"id": "",
+					"name": "ContactZapp API"
+				}
+			}
+		}
+	],
+	"connections": {
+		"Manual Trigger": {
+			"main": [
+				[
+					{
+						"node": "New person",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"New person": {
+			"main": [
+				[
+					{
+						"node": "Create contact",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Create contact": {
+			"main": [
+				[
+					{
+						"node": "Find contact",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		}
+	},
+	"settings": {}
+}

@@ -1,0 +1,150 @@
+{
+  "operations": {
+    "createV1Contact": [],
+    "createV1Webhook": [],
+    "deleteV1Webhook": [],
+    "getV1Contact": [],
+    "getV1Me": [],
+    "listV1Contacts": [
+      "cursor",
+      "email",
+      "limit",
+      "phone",
+      "query"
+    ],
+    "listV1Webhooks": [],
+    "postV1Sync": [],
+    "updateV1Contact": []
+  },
+  "schemas": {
+    "LabeledValue": [
+      "label",
+      "preferred",
+      "value"
+    ],
+    "PartialDate": [
+      "day",
+      "month",
+      "year"
+    ],
+    "SyncJobStatus": [
+      "status"
+    ],
+    "V1Contact": [
+      "displayName",
+      "emails",
+      "firstName",
+      "id",
+      "jobTitle",
+      "lastName",
+      "organization",
+      "phones",
+      "publicId",
+      "updatedAt"
+    ],
+    "V1ContactInput": [
+      "addresses",
+      "birthday",
+      "emails",
+      "firstName",
+      "jobTitle",
+      "labels",
+      "lastName",
+      "middleName",
+      "nickname",
+      "notes",
+      "organization",
+      "phones",
+      "prefix",
+      "suffix",
+      "urls"
+    ],
+    "V1ContactPage": [
+      "contacts",
+      "nextCursor"
+    ],
+    "V1ContactWriteResult": [
+      "contact",
+      "outcome",
+      "possibleMatches"
+    ],
+    "V1Error": [
+      "code",
+      "message"
+    ],
+    "V1Me": [
+      "email",
+      "scopes"
+    ],
+    "V1Webhook": [
+      "id",
+      "state",
+      "url"
+    ],
+    "V1WebhookCreateRequest": [
+      "event",
+      "url"
+    ],
+    "V1WebhookCreated": [
+      "id",
+      "secret"
+    ],
+    "V1WebhookList": [
+      "webhooks"
+    ]
+  },
+  "enums": {
+    "V1ErrorCode": [
+      "api_key_invalid",
+      "api_key_missing"
+    ],
+    "V1TriggerEvent": [
+      "account.needs_attention",
+      "contact.created",
+      "contact.updated",
+      "contacts.merged",
+      "match.needs_review"
+    ],
+    "WebhookState": [
+      "active"
+    ]
+  },
+  "requests": {
+    "createV1Contact": {
+      "method": "POST",
+      "path": "/api/v1/contacts"
+    },
+    "createV1Webhook": {
+      "method": "POST",
+      "path": "/api/v1/webhooks"
+    },
+    "deleteV1Webhook": {
+      "method": "DELETE",
+      "path": "/api/v1/webhooks/{id}"
+    },
+    "getV1Contact": {
+      "method": "GET",
+      "path": "/api/v1/contacts/{id}"
+    },
+    "getV1Me": {
+      "method": "GET",
+      "path": "/api/v1/me"
+    },
+    "listV1Contacts": {
+      "method": "GET",
+      "path": "/api/v1/contacts"
+    },
+    "listV1Webhooks": {
+      "method": "GET",
+      "path": "/api/v1/webhooks"
+    },
+    "postV1Sync": {
+      "method": "POST",
+      "path": "/api/v1/sync"
+    },
+    "updateV1Contact": {
+      "method": "PATCH",
+      "path": "/api/v1/contacts/{id}"
+    }
+  }
+}

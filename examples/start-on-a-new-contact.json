@@ -1,0 +1,76 @@
+{
+	"name": "Start when a contact is created",
+	"nodes": [
+		{
+			"id": "1",
+			"name": "ContactZapp Trigger",
+			"type": "n8n-nodes-contactzapp.contactZappTrigger",
+			"typeVersion": 1,
+			"position": [
+				0,
+				0
+			],
+			"webhookId": "00000000-0000-4000-8000-000000000001",
+			"parameters": {
+				"event": "contact.created"
+			},
+			"credentials": {
+				"contactZappApi": {
+					"id": "",
+					"name": "ContactZapp API"
+				}
+			}
+		},
+		{
+			"id": "2",
+			"name": "Skip events already seen",
+			"type": "n8n-nodes-base.removeDuplicates",
+			"typeVersion": 2,
+			"position": [
+				220,
+				0
+			],
+			"parameters": {
+				"operation": "removeItemsSeenInPreviousExecutions",
+				"dedupeValue": "={{ $json.id }}",
+				"options": {}
+			}
+		},
+		{
+			"id": "3",
+			"name": "Your next step",
+			"type": "n8n-nodes-base.noOp",
+			"typeVersion": 1,
+			"position": [
+				440,
+				0
+			],
+			"parameters": {}
+		}
+	],
+	"connections": {
+		"ContactZapp Trigger": {
+			"main": [
+				[
+					{
+						"node": "Skip events already seen",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		},
+		"Skip events already seen": {
+			"main": [
+				[
+					{
+						"node": "Your next step",
+						"type": "main",
+						"index": 0
+					}
+				]
+			]
+		}
+	},
+	"settings": {}
+}

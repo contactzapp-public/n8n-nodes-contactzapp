@@ -1,0 +1,14 @@
+{
+	"node": "n8n-nodes-contactzapp.contactZappTrigger",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Productivity"],
+	"resources": {
+		"credentialDocumentation": [
+			{ "url": "https://github.com/contactzapp-public/n8n-nodes-contactzapp#authentication" }
+		],
+		"primaryDocumentation": [
+			{ "url": "https://github.com/contactzapp-public/n8n-nodes-contactzapp#readme" }
+		]
+	}
+}
