@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const { sign, verifySignature, TOLERANCE_SECONDS } = require('../dist/nodes/ContactZapp/signature.js');
+const { webhookSignature } = require('../dist/nodes/ContactZapp/contract.js');
 
 const secret = 'cz_whsec_test-secret';
 const rawBody = Buffer.from('{"id":"evt_1","event":"contact.created"}');
@@ -68,4 +69,20 @@ test('a header without a timestamp or a signature is refused', () => {
 test('any one of several v1 signatures may match', () => {
 	const good = sign(secret, String(now), rawBody);
 	assert.deepEqual(check({ header: `t=${now},v1=${'0'.repeat(64)},v1=${good}` }), { ok: true });
+});
+
+test('the tolerance is the one the contract table declares', () => {
+	assert.equal(TOLERANCE_SECONDS, webhookSignature.toleranceSeconds);
+	const edge = webhookSignature.toleranceSeconds;
+	assert.deepEqual(check({ header: header(now - edge) }), { ok: true });
+	assert.deepEqual(check({ header: header(now - edge - 1) }), { ok: false, reason: 'stale_timestamp' });
+});
+
+test('the header format the contract table declares is the one the node reads', () => {
+	assert.equal(webhookSignature.header, 'ContactZapp-Signature');
+	assert.equal(webhookSignature.format, `t=<unix seconds>,${webhookSignature.scheme}=<hex HMAC-SHA256>`);
+	// Written from the declared scheme: a different scheme key is not a signature this node reads.
+	const good = sign(secret, String(now), rawBody);
+	assert.deepEqual(check({ header: `t=${now},${webhookSignature.scheme}=${good}` }), { ok: true });
+	assert.deepEqual(check({ header: `t=${now},v2=${good}` }), { ok: false, reason: 'malformed_signature' });
 });

@@ -146,5 +146,11 @@
       "method": "PATCH",
       "path": "/api/v1/contacts/{id}"
     }
+  },
+  "webhookSignature": {
+    "header": "ContactZapp-Signature",
+    "scheme": "v1",
+    "format": "t=<unix seconds>,v1=<hex HMAC-SHA256>",
+    "toleranceSeconds": 300
   }
 }

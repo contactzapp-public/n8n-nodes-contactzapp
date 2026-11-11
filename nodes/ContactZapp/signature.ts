@@ -1,14 +1,15 @@
 import { createHmac, timingSafeEqual } from 'crypto';
+import { webhookSignature } from './contract';
 
 /** A delivery whose timestamp is further than this from the clock is refused. */
-export const TOLERANCE_SECONDS = 5 * 60;
+export const TOLERANCE_SECONDS = webhookSignature.toleranceSeconds;
 
 export type SignatureRefusal = 'missing_signature' | 'malformed_signature' | 'stale_timestamp' | 'bad_signature';
 
 export type SignatureResult = { ok: true } | { ok: false; reason: SignatureRefusal };
 
 export interface SignatureInput {
-	/** The `ContactZapp-Signature` header: `t=<unix seconds>,v1=<hex signature>`. */
+	/** The signature header (`webhookSignature.header`), in the format `webhookSignature.format` states. */
 	header: string | string[] | undefined;
 	/** The body exactly as it arrived, before any parsing. */
 	rawBody: Buffer | string | undefined;
@@ -36,7 +37,7 @@ export function verifySignature({ header, rawBody, secret, nowSeconds }: Signatu
 		const key = part.slice(0, at).trim();
 		const val = part.slice(at + 1).trim();
 		if (key === 't') timestamp = val;
-		else if (key === 'v1') signatures.push(val);
+		else if (key === webhookSignature.scheme) signatures.push(val);
 	}
 	if (!/^\d{1,15}$/.test(timestamp) || signatures.length === 0) {
 		return { ok: false, reason: 'malformed_signature' };

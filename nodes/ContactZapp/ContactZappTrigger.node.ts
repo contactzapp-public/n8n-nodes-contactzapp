@@ -9,13 +9,13 @@ import type {
 import { NodeConnectionTypes } from 'n8n-workflow';
 
 import { apiError, describeFailure, send } from './GenericFunctions';
-import { enums, operations, schemas } from './contract';
+import { enums, operations, schemas, webhookSignature } from './contract';
 import type { TriggerEvent } from './contract';
 import { verifySignature } from './signature';
 
 type Row = Record<string, unknown>;
 
-const SIGNATURE_HEADER = 'contactzapp-signature';
+const SIGNATURE_HEADER = webhookSignature.header.toLowerCase();
 
 const eventNames: Record<TriggerEvent, string> = {
 	'contact.created': 'Contact Created',

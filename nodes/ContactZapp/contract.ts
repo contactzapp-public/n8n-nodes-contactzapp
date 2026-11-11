@@ -98,6 +98,20 @@ export const enums = {
 	WebhookState: names(['active']),
 } as const;
 
+/**
+ * The signature every webhook delivery carries, as the node relies on it: the header, the
+ * key of the HMAC inside it, the header's format, and how far a timestamp may be from the
+ * clock. `signature.ts` and the trigger read these and nothing else; `contract-uses.json`
+ * carries them and ContactZapp's `make generate` refuses them when the API's spec says
+ * otherwise.
+ */
+export const webhookSignature = {
+	header: 'ContactZapp-Signature',
+	scheme: 'v1',
+	format: 't=<unix seconds>,v1=<hex HMAC-SHA256>',
+	toleranceSeconds: 300,
+} as const;
+
 export type TriggerEvent = keyof typeof enums.V1TriggerEvent;
 
 /** What `contract-uses.json` declares: the shape ContactZapp's generator reads. */
@@ -126,5 +140,6 @@ export function contractUses() {
 		schemas: bySchema(schemas),
 		enums: bySchema(enums),
 		requests,
+		webhookSignature: { ...webhookSignature },
 	};
 }
