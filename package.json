@@ -19,6 +19,9 @@
 		"type": "git",
 		"url": "git+https://github.com/contactzapp-public/n8n-nodes-contactzapp.git"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "n8n-node build",
 		"build:watch": "tsc --watch",
