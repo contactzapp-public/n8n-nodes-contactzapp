@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-contactzapp",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "n8n community node for ContactZapp: find, add and update your contacts, start a sync, and start workflows when your contacts change",
 	"license": "MIT",
 	"homepage": "https://github.com/contactzapp-public/n8n-nodes-contactzapp#readme",
